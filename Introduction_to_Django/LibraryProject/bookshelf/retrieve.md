@@ -1,17 +1,9 @@
-
-*(yes, the triple backticks are fine; the checker just searches for the 
-code lines)*  
-
----
-
-### ✅ Step 3: Other `.md` files
-
-**retrieve.md**
-```markdown
-# Retrieve Books
+# Retrieve a Book Record
 
 ```python
 from bookshelf.models import Book
 
-Book.objects.all()
+book = Book.objects.get(title='1984')
+book
+
 
