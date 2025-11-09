@@ -1,16 +1,16 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic.detail import DetailView
+from django.views.generic import ListView
+from django.contrib.auth.decorators import user_passes_test, 
+permission_required, login_required
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
-from django.contrib.auth.decorators import user_passes_test, 
-permission_required
-
 from .models import Book, Library, UserProfile
 
-# ----------------------------
-# Task 0 & 1: Book & Library Views
-# ----------------------------
+# ----------------------
+# Task 0: Book & Library Views
+# ----------------------
 
 # Function-based view: list all books
 def list_books(request):
@@ -24,9 +24,10 @@ class LibraryDetailView(DetailView):
     template_name = 'relationship_app/library_detail.html'
     context_object_name = 'library'
 
-# ----------------------------
+
+# ----------------------
 # Task 2: Authentication Views
-# ----------------------------
+# ----------------------
 
 def register(request):
     if request.method == 'POST':
@@ -40,18 +41,28 @@ def register(request):
     return render(request, 'relationship_app/register.html', {'form': 
 form})
 
-# ----------------------------
-# Task 3: Role-Based Access Views
-# ----------------------------
+class CustomLoginView(LoginView):
+    template_name = 'relationship_app/login.html'
+
+class CustomLogoutView(LogoutView):
+    template_name = 'relationship_app/logout.html'
+
+
+# ----------------------
+# Task 3: Role-Based Views
+# ----------------------
 
 def is_admin(user):
-    return user.userprofile.role == 'Admin'
+    return hasattr(user, 'userprofile') and user.userprofile.role == 
+'Admin'
 
 def is_librarian(user):
-    return user.userprofile.role == 'Librarian'
+    return hasattr(user, 'userprofile') and user.userprofile.role == 
+'Librarian'
 
 def is_member(user):
-    return user.userprofile.role == 'Member'
+    return hasattr(user, 'userprofile') and user.userprofile.role == 
+'Member'
 
 @user_passes_test(is_admin)
 def admin_view(request):
@@ -65,22 +76,45 @@ def librarian_view(request):
 def member_view(request):
     return render(request, 'relationship_app/member_view.html')
 
-# ----------------------------
-# Task 4: Permission-Secured Views
-# ----------------------------
 
-@permission_required('relationship_app.add_book', raise_exception=True)
+# ----------------------
+# Task 4: Book Management with Permissions
+# ----------------------
+
+@permission_required('relationship_app.can_add_book', 
+raise_exception=True)
 def add_book(request):
-    # implement your add book logic here
-    return render(request, 'relationship_app/add_book.html')
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        author_id = request.POST.get('author')
+        author = get_object_or_404(Author, id=author_id)
+        Book.objects.create(title=title, author=author)
+        return redirect('list_books')
+    authors = Author.objects.all()
+    return render(request, 'relationship_app/add_book.html', {'authors': 
+authors})
 
-@permission_required('relationship_app.change_book', raise_exception=True)
+@permission_required('relationship_app.can_change_book', 
+raise_exception=True)
 def edit_book(request, book_id):
-    # implement your edit book logic here
-    return render(request, 'relationship_app/edit_book.html')
+    book = get_object_or_404(Book, id=book_id)
+    if request.method == 'POST':
+        book.title = request.POST.get('title')
+        author_id = request.POST.get('author')
+        book.author = get_object_or_404(Author, id=author_id)
+        book.save()
+        return redirect('list_books')
+    authors = Author.objects.all()
+    return render(request, 'relationship_app/edit_book.html', {'book': 
+book, 'authors': authors})
 
-@permission_required('relationship_app.delete_book', raise_exception=True)
+@permission_required('relationship_app.can_delete_book', 
+raise_exception=True)
 def delete_book(request, book_id):
-    # implement your delete book logic here
-    return render(request, 'relationship_app/delete_book.html')
+    book = get_object_or_404(Book, id=book_id)
+    if request.method == 'POST':
+        book.delete()
+        return redirect('list_books')
+    return render(request, 'relationship_app/delete_book.html', {'book': 
+book})
 
