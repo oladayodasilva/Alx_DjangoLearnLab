@@ -9,7 +9,7 @@ from django.dispatch import receiver
 
 class Author(models.Model):
     name = models.CharField(max_length=100)
-    
+
     def __str__(self):
         return self.name
 
@@ -44,6 +44,7 @@ class Librarian(models.Model):
     def __str__(self):
         return self.name
 
+
 # ----------------------
 # Task 3: User Roles
 # ----------------------
@@ -61,7 +62,7 @@ class UserProfile(models.Model):
         return f"{self.user.username} - {self.role}"
 
 
-# Signal to create UserProfile automatically
+# Automatically create user profile on registration
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
