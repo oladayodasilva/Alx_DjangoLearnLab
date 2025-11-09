@@ -1,7 +1,8 @@
+from django.contrib.auth.decorators import user_passes_test, login_required
+from django.contrib.auth.decorators import permission_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic.detail import DetailView
-from django.contrib.auth.decorators import user_passes_test, 
-login_required, permission_required
+from django.contrib.auth.decorators import user_passes_test, login_required, permission_required
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
@@ -13,8 +14,7 @@ from .models import Author, Book, Library, UserProfile
 
 def list_books(request):
     books = Book.objects.all()
-    return render(request, 'relationship_app/list_books.html', {'books': 
-books})
+    return render(request, 'relationship_app/list_books.html', {'books': books})
 
 
 class LibraryDetailView(DetailView):
@@ -36,8 +36,7 @@ def register(request):
             return redirect('list_books')
     else:
         form = UserCreationForm()
-    return render(request, 'relationship_app/register.html', {'form': 
-form})
+    return render(request, 'relationship_app/register.html', {'form': form})
 
 
 class CustomLoginView(LoginView):
@@ -96,8 +95,7 @@ def add_book(request):
         Book.objects.create(title=title, author=author)
         return redirect('list_books')
     authors = Author.objects.all()
-    return render(request, 'relationship_app/add_book.html', {'authors': 
-authors})
+    return render(request, 'relationship_app/add_book.html', {'authors': authors})
 
 
 @permission_required('relationship_app.can_change_book', 
@@ -111,8 +109,7 @@ def edit_book(request, book_id):
         book.save()
         return redirect('list_books')
     authors = Author.objects.all()
-    return render(request, 'relationship_app/edit_book.html', {'book': 
-book, 'authors': authors})
+    return render(request, 'relationship_app/edit_book.html', {'book': book, 'authors': authors})
 
 
 @permission_required('relationship_app.can_delete_book', 
