@@ -1,40 +1,31 @@
-# relationship_app/urls.py
-
 from django.urls import path
-from .views import (
-    list_books,
-    LibraryDetailView,
-    register_view,
-    login_view,
-    logout_view,
-    admin_view,
-    librarian_view,
-    member_view,
-    add_book,
-    edit_book,
-    delete_book
-)
+from . import views
+from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
-    # Task 1: Library Views
-    path('books/', list_books, name='list_books'),
-    path('library/<int:pk>/', LibraryDetailView.as_view(), 
+    # Task 0 & 1: Book & Library URLs
+    path('books/', views.list_books, name='list_books'),
+    path('library/<int:pk>/', views.LibraryDetailView.as_view(), 
 name='library_detail'),
 
-    # Task 2: Authentication Views
-    path('register/', register_view, name='register'),
-    path('login/', login_view, name='login'),
-    path('logout/', logout_view, name='logout'),
+    # Task 2: Authentication URLs
+    path('login/', 
+LoginView.as_view(template_name='relationship_app/login.html'), 
+name='login'),
+    path('logout/', 
+LogoutView.as_view(template_name='relationship_app/logout.html'), 
+name='logout'),
+    path('register/', views.register, name='register'),
 
-    # Task 3: Role-Based Views
-    path('admin-view/', admin_view, name='admin_view'),
-    path('librarian-view/', librarian_view, name='librarian_view'),
-    path('member-view/', member_view, name='member_view'),
+    # Task 3: Role-based URLs
+    path('admin-view/', views.admin_view, name='admin_view'),
+    path('librarian-view/', views.librarian_view, name='librarian_view'),
+    path('member-view/', views.member_view, name='member_view'),
 
-    # Task 4: Permission-Protected Book Views
-    path('books/add/', add_book, name='add_book'),
-    path('books/edit/<int:pk>/', edit_book, name='edit_book'),
-    path('books/delete/<int:pk>/', delete_book, name='delete_book'),
+    # Task 4: Permission-secured URLs
+    path('books/add/', views.add_book, name='add_book'),
+    path('books/<int:book_id>/edit/', views.edit_book, name='edit_book'),
+    path('books/<int:book_id>/delete/', views.delete_book, 
+name='delete_book'),
 ]
-
 
