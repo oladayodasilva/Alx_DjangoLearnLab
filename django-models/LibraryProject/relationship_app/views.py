@@ -1,12 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic.detail import DetailView
 from django.views.generic import ListView
-from django.contrib.auth.decorators import user_passes_test, 
-permission_required, login_required
+from django.contrib.auth.decorators import user_passes_test, login_required
+from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
-from .models import Book, Library, UserProfile
+from .models import Author, Book, Library, UserProfile
 
 # ----------------------
 # Task 0: Book & Library Views
