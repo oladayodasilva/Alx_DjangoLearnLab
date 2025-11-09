@@ -1,12 +1,10 @@
-from django.contrib.auth.decorators import user_passes_test, login_required
-from django.contrib.auth.decorators import permission_required
-from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic.detail import DetailView
-from django.contrib.auth.decorators import user_passes_test, login_required, permission_required
-from django.contrib.auth.views import LoginView, LogoutView
+from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth import login
-from .models import Author, Book, Library, UserProfile
+from django.contrib.auth.decorators import permission_required
+
+from .models import Author, Book, Library, Librarian
 
 # ----------------------
 # Task 0 & 1: Book & Library Views
@@ -28,24 +26,22 @@ class LibraryDetailView(DetailView):
 # ----------------------
 
 def register(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('list_books')
+            return redirect("home")
     else:
         form = UserCreationForm()
-    return render(request, 'relationship_app/register.html', {'form': form})
-
+    return render(request, "register.html", {"form": form})
 
 class CustomLoginView(LoginView):
-    template_name = 'relationship_app/login.html'
+    template_name = "login.html"
 
 
 class CustomLogoutView(LogoutView):
-    template_name = 'relationship_app/logout.html'
-
+    template_name = "logout.html"
 
 # ----------------------
 # Task 3: Role-Based Views
