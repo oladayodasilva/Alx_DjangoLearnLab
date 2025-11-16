@@ -146,6 +146,8 @@ SECURE_BROWSER_XSS_FILTER = True
 # Prevent site from being rendered in iframes (mitigate clickjacking)
 X_FRAME_OPTIONS = "DENY"
 
+# Trust X-Forwarded-Proto header from the proxy for HTTPS detection
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 DEBUG = False  # Remember to switch to True when developing locally
 
