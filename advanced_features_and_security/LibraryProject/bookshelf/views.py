@@ -2,6 +2,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import permission_required
 from django import forms
+from .forms import ExampleForm
 from .models import Book
 from .forms import BookForm
 
