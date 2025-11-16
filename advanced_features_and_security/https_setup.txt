@@ -1,0 +1,11 @@
+HTTPS Deployment Notes:
+
+To deploy the Django application securely with HTTPS:
+1. Install an SSL/TLS certificate using Let’s Encrypt or another provider.
+2. Configure the web server (Nginx or Apache) to:
+   - Redirect all HTTP traffic to HTTPS.
+   - Serve the certificate and key files.
+   - Forward HTTPS headers (X-Forwarded-Proto) to Django when using reverse proxy.
+3. Ensure Django's SECURE_SSL_REDIRECT is enabled to force HTTPS internally.
+4. Ensure SESSION_COOKIE_SECURE and CSRF_COOKIE_SECURE are enabled.
+

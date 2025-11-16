@@ -125,13 +125,26 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "bookshelf.CustomUser"
 
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = "DENY"
+# Redirect all HTTP traffic to HTTPS
+SECURE_SSL_REDIRECT = True
 
+# HTTP Strict Transport Security — force browsers to only use HTTPS
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
 
-CSRF_COOKIE_SECURE = True
+# Secure cookies — only sent over HTTPS
 SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# Prevent browsers from MIME-sniffing content
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Enable browser-based XSS protection
+SECURE_BROWSER_XSS_FILTER = True
+
+# Prevent site from being rendered in iframes (mitigate clickjacking)
+X_FRAME_OPTIONS = "DENY"
 
 
 DEBUG = False  # Remember to switch to True when developing locally
