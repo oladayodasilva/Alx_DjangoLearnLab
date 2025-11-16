@@ -1,6 +1,7 @@
 # bookshelf/views.py
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import permission_required
+from django import forms
 from .models import Book
 from .forms import BookForm
 
@@ -40,3 +41,18 @@ def delete_book(request, pk):
         return redirect('book_list')
     return render(request, 'bookshelf/delete_book.html', {'book': book})
 
+class SearchForm(forms.Form):
+    query = forms.CharField(max_length=100)
+
+def search_books(request):
+    form = SearchForm(request.GET or None)
+    results = []
+
+    if form.is_valid():
+        query = form.cleaned_data['query']
+        results = Book.objects.filter(title__icontains=query)
+
+    return render(request, "bookshelf/book_list.html", {
+        "form": form,
+        "results": results
+    })
