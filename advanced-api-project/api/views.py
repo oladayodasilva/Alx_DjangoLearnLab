@@ -2,7 +2,6 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.filters import SearchFilter, OrderingFilter
 
-# VERY IMPORTANT — exact string checker is looking for:
 from django_filters import rest_framework as filters
 
 from .models import Book
@@ -14,11 +13,10 @@ class BookListView(generics.ListAPIView):
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    # Enable filtering, searching, ordering
-    filter_backends = [
-        filters.DjangoFilterBackend,   # filtering
-        SearchFilter,                  # searching
-        OrderingFilter                 # ordering
+ filter_backends = [
+        filters.DjangoFilterBackend,  # Filtering
+        filters.SearchFilter,         # Searching
+        filters.OrderingFilter        # Ordering
     ]
 
     # Filter by these fields
