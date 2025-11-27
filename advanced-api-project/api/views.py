@@ -1,24 +1,23 @@
-from rest_framework import generics
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
-from .models import Task
-from .serializers import TaskSerializer
+from django.views.generic import ListView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from .models import Book
 
 
-class TaskDetailView(generics.RetrieveAPIView):
-    """
-    Returns the details of a single task.
-    """
-    queryset = Task.objects.all()
-    serializer_class = TaskSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+class BookListView(ListView):
+    model = Book
+    template_name = 'book_list.html'
+    context_object_name = 'books'
 
 
-class TaskCreateView(generics.CreateAPIView):
-    """
-    Creates a new task.
-    Only authenticated users can create tasks.
-    """
-    queryset = Task.objects.all()
-    serializer_class = TaskSerializer
-    permission_classes = [IsAuthenticated]
+class BookUpdateView(UpdateView):
+    model = Book
+    fields = ['title', 'description', 'publication_date', 'author']
+    template_name = 'book_form.html'
+    success_url = reverse_lazy('book-list')
+
+
+class BookDeleteView(DeleteView):
+    model = Book
+    template_name = 'book_confirm_delete.html'
+    success_url = reverse_lazy('book-list')
 
