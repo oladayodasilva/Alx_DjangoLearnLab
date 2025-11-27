@@ -15,3 +15,21 @@ class Comment(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+
+class Author(models.Model):
+    name = models.CharField(max_length=255)
+    bio = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Book(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    publication_date = models.DateField()
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='books')
+
+    def __str__(self):
+        return self.title
+
