@@ -1,11 +1,6 @@
 from django.urls import path
-from .views import BookListView, BookUpdateView, BookDeleteView
-from .views import TaskDetailView, TaskCreateView
-
-urlpatterns = [
-    path('tasks/<int:pk>/', TaskDetailView.as_view(), name='task-detail'),
-    path('tasks/create/', TaskCreateView.as_view(), name='task-create'),
-]
+from .views import BookViewSet, AuthorViewSet
+from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register(r'books', BookViewSet, basename='books')
@@ -18,3 +13,4 @@ urlpatterns = [
 ]
 
 urlpatterns += router.urls
+
