@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import BlogPost, Comment
+from .models import Author,Book
 
 class UserSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
@@ -31,3 +32,13 @@ class BlogPostSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Title must be at least 5 characters long.")
         return data
 
+class AuthorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Author
+        fields = '__all__'
+
+
+class BookSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Book
+        fields = '__all__'
