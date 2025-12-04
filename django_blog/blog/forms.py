@@ -30,7 +30,12 @@ class CommentForm(forms.ModelForm):
         widgets = {
             'text': forms.Textarea(attrs={'rows': 3})
         }
-
+    
+    def clean_text(self):
+        text = self.cleaned_data.get('text')
+        if len(text.strip()) < 3:
+            raise forms.ValidationError("Comment must be at least 3 characters long.")
+        return text
     class Meta:
         model = Comment
         fields = ['content']
