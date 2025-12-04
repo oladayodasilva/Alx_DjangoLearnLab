@@ -24,7 +24,12 @@ class PostForm(forms.ModelForm):
         fields = ['title', 'content', 'published_date']  # author set in view
 
 class CommentForm(forms.ModelForm):
-    content = forms.CharField(widget=forms.Textarea(attrs={'rows':3}), label='')
+    class Meta:
+        model = Comment
+        fields = ['text']
+        widgets = {
+            'text': forms.Textarea(attrs={'rows': 3})
+        }
 
     class Meta:
         model = Comment
