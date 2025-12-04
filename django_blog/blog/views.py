@@ -11,7 +11,7 @@ from django.urls import reverse_lazy
 
 from .models import Post, Comment
 from .forms import UserRegisterForm, UserUpdateForm, PostForm, CommentForm
-
+from django.db.models import Q
 
 # ============================
 # AUTH VIEWS
@@ -60,6 +60,12 @@ class PostListView(ListView):
     ordering = ['-published_date', '-created_at']
     paginate_by = 10
 
+    def get_queryset(self):
+        tag_name = self.kwargs.get('tag_name')
+        qs = super().get_queryset()
+        if tag_name:
+            qs = qs.filter(tags__name__iexact=tag_name)
+        return qs
 
 class PostDetailView(DetailView):
     model = Post
@@ -100,6 +106,20 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         return self.request.user == self.get_object().author
 
+class PostSearchView(ListView):
+    model = Post
+    template_name = 'blog/post_search_results.html'
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return Post.objects.filter(
+                Q(title__icontains=query) |
+                Q(content__icontains=query) |
+                Q(tags__name__icontains=query)
+            ).distinct()
+        return Post.objects.none()
 
 # ============================
 # COMMENT CRUD

@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Post, Comment
+from taggit.forms import TagWidget
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -21,15 +22,15 @@ class UserUpdateForm(forms.ModelForm):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'content', 'published_date']  # author set in view
+        fields = ['title', 'content','tags', 'published_date']  # author set in view
+        widgets = {
+            'tags': TagWidget(),
+        }
 
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ['text']
-        widgets = {
-            'text': forms.Textarea(attrs={'rows': 3})
-        }
+        fields = ['content']
     
     def clean_text(self):
         text = self.cleaned_data.get('text')
