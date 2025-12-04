@@ -29,6 +29,7 @@ urlpatterns = [
     path('post/<int:pk>/delete/', views.PostDeleteView.as_view(), name='post-delete'),
     path('post/<int:pk>/comments/new/', views.CommentCreateView.as_view(), name='comment-create'),
     path('tags/<str:tag_name>/', views.PostListView.as_view(), name='posts-by-tag'),  # tag filter
+    path('tags/<slug:tag_slug>/', views.PostByTagListView.as_view(), name='posts-by-tag'),
 
     # Comment URLs — include both forms so checker finds one it expects
     path('posts/<int:post_id>/comments/new/', CommentCreateView.as_view(), name='comment-create-by-post_id'),
