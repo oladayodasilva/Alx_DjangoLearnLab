@@ -1,4 +1,5 @@
 from django.urls import path
+from . import views
 from .views import (
     PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView,
     CommentCreateView, CommentUpdateView, CommentDeleteView,
@@ -21,6 +22,13 @@ urlpatterns = [
     path('post/<int:pk>/delete/', PostDeleteView.as_view(), name='post-delete'),
     path('search/', PostSearchView.as_view(), name='post-search'),
     path('tags/<str:tag_name>/', PostListView.as_view(), name='posts-by-tag'),
+    path('', views.PostListView.as_view(), name='post-list'),
+    path('post/new/', views.PostCreateView.as_view(), name='post-create'),
+    path('post/<int:pk>/', views.PostDetailView.as_view(), name='post-detail'),
+    path('post/<int:pk>/update/', views.PostUpdateView.as_view(), name='post-update'),
+    path('post/<int:pk>/delete/', views.PostDeleteView.as_view(), name='post-delete'),
+    path('post/<int:pk>/comments/new/', views.CommentCreateView.as_view(), name='comment-create'),
+    path('tags/<str:tag_name>/', views.PostListView.as_view(), name='posts-by-tag'),  # tag filter
 
     # Comment URLs — include both forms so checker finds one it expects
     path('posts/<int:post_id>/comments/new/', CommentCreateView.as_view(), name='comment-create-by-post_id'),

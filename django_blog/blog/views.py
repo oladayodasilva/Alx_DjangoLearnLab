@@ -60,12 +60,19 @@ class PostListView(ListView):
     ordering = ['-published_date', '-created_at']
     paginate_by = 10
 
-    def get_queryset(self):
-        tag_name = self.kwargs.get('tag_name')
-        qs = super().get_queryset()
-        if tag_name:
-            qs = qs.filter(tags__name__iexact=tag_name)
-        return qs
+def get_queryset(self):
+    queryset = super().get_queryset()
+    query = self.request.GET.get('q')
+    tag_name = self.kwargs.get('tag_name')
+    if query:
+        queryset = queryset.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(tags__name__icontains=query)
+        ).distinct()
+    if tag_name:
+        queryset = queryset.filter(tags__name__iexact=tag_name)
+    return queryset
 
 class PostDetailView(DetailView):
     model = Post
