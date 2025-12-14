@@ -1,5 +1,5 @@
 from rest_framework.routers import DefaultRouter
-from .views import PostViewSet, CommentViewSet, FeedListView, FeedView
+from .views import PostViewSet, CommentViewSet, FeedListView, FeedView, LikePostView, UnlikePostView
 from django.urls import path, include
 
 router = DefaultRouter()
@@ -22,5 +22,7 @@ urlpatterns = [
         "patch": "partial_update",
         "delete": "destroy"
     })),
+    path('posts/<int:pk>/like/', LikePostView.as_view()),
+    path('posts/<int:pk>/unlike/', UnlikePostView.as_view()),
 ]
 
