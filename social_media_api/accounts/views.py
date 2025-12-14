@@ -3,7 +3,6 @@ from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from .models import User
 from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
@@ -11,7 +10,6 @@ from rest_framework import generics, permissions
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 
-CustomUser = get_user_model()
 User = get_user_model()
 
 class FollowUserView(generics.GenericAPIView):
@@ -27,7 +25,7 @@ class UnfollowUserView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, user_id):
-        user_to_unfollow = CustomUser.objects.get(id=user_id)
+        user_to_unfollow = User.objects.get(id=user_id)
         request.user.following.remove(user_to_unfollow)
         return Response({"message": "User unfollowed"})
 
@@ -89,9 +87,9 @@ class ProfileView(APIView):
         return Response(UserSerializer(request.user).data)
 
 class UserListView(generics.ListAPIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    queryset = CustomUser.objects.all()   # <- literal the checker needs
-    serializer_class = None  # optional: set to a serializer if you have one
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
         users = CustomUser.objects.all()
