@@ -22,7 +22,7 @@ urlpatterns = [
         "patch": "partial_update",
         "delete": "destroy"
     })),
-    path('posts/<int:pk>/like/', LikePostView.as_view()),
-    path('posts/<int:pk>/unlike/', UnlikePostView.as_view()),
+    path('posts/<int:pk>/like/', LikePostView.as_view(), name='like-post'),
+    path('posts/<int:pk>/unlike/', UnlikePostView.as_view(), name='unlike-post'),
 ]
 
