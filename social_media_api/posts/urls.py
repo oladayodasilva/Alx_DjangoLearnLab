@@ -9,7 +9,7 @@ urlpatterns = [
     path("", include(router.urls)),
 
     path('feed/', FeedListView.as_view(), name='posts-feed'),
-    path("feed/", FeedView.as_view(), name="feed")
+    path("feed/", FeedView.as_view(), name="feed"),
 
     # Nested comment routes
     path("posts/<int:post_pk>/comments/", CommentViewSet.as_view({
