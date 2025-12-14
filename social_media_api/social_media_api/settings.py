@@ -16,11 +16,15 @@ SECRET_KEY = 'django-insecure-5$d0)(0z13oebrg*f)k%ue!x@6*pc$g1c%!(tcd*0b$zx_kbw6
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    "alxdjangolearnlab-production-65ae.up.railway.app",
+    "127.0.0.1",
+]
 
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = True
 
 # Application definition
