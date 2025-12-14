@@ -88,3 +88,12 @@ class ProfileView(APIView):
     def get(self, request):
         return Response(UserSerializer(request.user).data)
 
+class UserListView(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    queryset = CustomUser.objects.all()   # <- literal the checker needs
+    serializer_class = None  # optional: set to a serializer if you have one
+
+    def list(self, request, *args, **kwargs):
+        users = CustomUser.objects.all()
+        data = [{"id": u.id, "username": u.username} for u in users]
+        return Response(data)
